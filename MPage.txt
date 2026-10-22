@@ -1,0 +1,771 @@
+; EXPERIMENT 4 - PROGRAM 1: ADD TWO 16-BIT NUMBERS WITHOUT DATA SEGMENT
+Code_here segment
+Assume cs:Code_here
+Start:
+    mov ax,1234h
+    mov bx,5678h
+    add ax,bx
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 4 - PROGRAM 2: ADD TWO 16-BIT NUMBERS USING DATA SEGMENT
+Data_here segment
+    Num1 dw 1234h
+    Num2 dw 5678h
+    Result dw 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov ax,Num1
+    add ax,Num2
+    mov Result,ax
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 4 - PROGRAM 3: SCALAR MULTIPLICATION OF FIVE UNSIGNED BYTES
+Data_here segment
+    Arr db 2,3,4,5,6
+    Scalar db 3
+    Result dw 5 dup(0)
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    lea si,Arr
+    lea di,Result
+    mov cx,5
+L1:
+    mov al,[si]
+    mul Scalar
+    mov [di],ax
+    inc si
+    add di,2
+    loop L1
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 4 - EXERCISE 1: SUM OF FIRST N POSITIVE INTEGERS
+Data_here segment
+    N dw 5
+    Result dw 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov cx,N
+    mov ax,0
+    mov bx,1
+L1:
+    add ax,bx
+    inc bx
+    loop L1
+    mov Result,ax
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 4 - EXERCISE 2: OR WITHOUT USING OR INSTRUCTION
+Data_here segment
+    Num1 dw 1234h
+    Num2 dw 5678h
+    Result dw 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov ax,Num1
+    mov bx,Num2
+    not ax
+    not bx
+    and ax,bx
+    not ax
+    mov Result,ax
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 4 - EXERCISE 3: COUNT SIMILAR BITS IN TWO 16-BIT NUMBERS
+Data_here segment
+    Num1 dw 1234h
+    Num2 dw 5678h
+    Result dw 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov ax,Num1
+    xor ax,Num2
+    mov cx,16
+    mov bx,0
+L1:
+    shr ax,1
+    jc L2
+    inc bx
+L2:
+    loop L1
+    mov Result,bx
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 5 - PROGRAM 1: FIND MINIMUM OF FIVE 16-BIT NUMBERS
+Data_here segment
+    Arr dw 1234h,2345h,0123h,4567h,3456h
+    Minimum dw 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    lea si,Arr
+    mov ax,[si]
+    mov cx,4
+    add si,2
+L1:
+    mov bx,[si]
+    cmp ax,bx
+    jbe L2
+    mov ax,bx
+L2:
+    add si,2
+    loop L1
+    mov Minimum,ax
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 5 - PROGRAM 2A: SORT FIVE 8-BIT NUMBERS IN ASCENDING ORDER
+Data_here segment
+    Arr db 5,2,4,1,3
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov cx,4
+L1:
+    lea si,Arr
+    mov bx,cx
+L2:
+    mov al,[si]
+    mov dl,[si+1]
+    cmp al,dl
+    jbe L3
+    mov [si],dl
+    mov [si+1],al
+L3:
+    inc si
+    dec bx
+    jnz L2
+    loop L1
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 5 - PROGRAM 2B: SORT FIVE 8-BIT NUMBERS IN DESCENDING ORDER
+Data_here segment
+    Arr db 5,2,4,1,3
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov cx,4
+L1:
+    lea si,Arr
+    mov bx,cx
+L2:
+    mov al,[si]
+    mov dl,[si+1]
+    cmp al,dl
+    jae L3
+    mov [si],dl
+    mov [si+1],al
+L3:
+    inc si
+    dec bx
+    jnz L2
+    loop L1
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 5 - EXERCISE: FACTORIAL OF A NUMBER (N=5)
+Data_here segment
+    N dw 5
+    Result dw 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov cx,N
+    mov ax,1
+L1:
+    mul cx
+    loop L1
+    mov Result,ax
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 6 - PROGRAM 1: READ A CHARACTER AND DISPLAY IT
+Code_here segment
+Assume cs:Code_here
+Start:
+    mov ah,01h
+    int 21h
+    mov dl,al
+    mov ah,02h
+    int 21h
+    mov ax,4C00h
+    int 21h
+Code_here ends
+End Start
+
+
+; EXPERIMENT 6 - PROGRAM 2: CONVERT A CHARACTER TO LOWERCASE
+Code_here segment
+Assume cs:Code_here
+Start:
+    mov ah,01h
+    int 21h
+    and al,0DFh
+    xor al,20h
+    mov dl,al
+    mov ah,02h
+    int 21h
+    mov ax,4C00h
+    int 21h
+Code_here ends
+End Start
+
+
+; EXPERIMENT 6 - PROGRAM 3: CONVERT AN UPPERCASE STRING TO LOWERCASE
+Data_here segment
+    Str db 'HELLO WORLD$'
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    lea si,Str
+L1:
+    mov al,[si]
+    cmp al,'$'
+    je L2
+    cmp al,'A'
+    jb L3
+    cmp al,'Z'
+    ja L3
+    add byte ptr [si],20h
+L3:
+    inc si
+    jmp L1
+L2:
+    lea dx,Str
+    mov ah,09h
+    int 21h
+    mov ax,4C00h
+    int 21h
+Code_here ends
+End Start
+
+
+; EXPERIMENT 6 - EXERCISE: CHECK A PASSWORD
+Data_here segment
+    Original db '1234'
+    Prompt db 'Enter password: $'
+    Success db 13,10,'Correct password$'
+    Failure db 13,10,'Wrong password$'
+    Buffer db 5,0,5 dup(0)
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    lea dx,Prompt
+    mov ah,09h
+    int 21h
+    lea dx,Buffer
+    mov ah,0Ah
+    int 21h
+    cmp byte ptr Buffer+1,4
+    jne L2
+    lea si,Original
+    lea di,Buffer+2
+    mov cx,4
+L1:
+    mov al,[si]
+    cmp al,[di]
+    jne L2
+    inc si
+    inc di
+    loop L1
+    lea dx,Success
+    jmp L3
+L2:
+    lea dx,Failure
+L3:
+    mov ah,09h
+    int 21h
+    mov ax,4C00h
+    int 21h
+Code_here ends
+End Start
+
+
+; EXPERIMENT 7 - PROGRAM 1: MOVE A STRING IN THE SAME SEGMENT
+Data_here segment
+    Source db 'HELLO'
+    Destination db 5 dup(0)
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov es,ax
+    lea si,Source
+    lea di,Destination
+    mov cx,5
+    cld
+    rep movsb
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 7 - PROGRAM 2: MOVE A STRING BETWEEN TWO SEGMENTS
+Source_here segment
+    Source db 'HELLO'
+Source_here ends
+
+Destination_here segment
+    Destination db 5 dup(0)
+Destination_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Source_here,es:Destination_here
+Start:
+    mov ax,Source_here
+    mov ds,ax
+    mov ax,Destination_here
+    mov es,ax
+    lea si,Source
+    lea di,Destination
+    mov cx,5
+    cld
+    rep movsb
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 7 - PROGRAM 3: FIND A CHARACTER POSITION IN A STRING
+Data_here segment
+    Str db 'COMPUTER'
+    N db 8
+    Prompt db 'Enter character: $'
+    FoundMsg db 13,10,'Position: $'
+    NotFound db 13,10,'NOT FOUND$'
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    lea dx,Prompt
+    mov ah,09h
+    int 21h
+    mov ah,01h
+    int 21h
+    mov bl,al
+    lea si,Str
+    xor cx,cx
+    mov cl,N
+    mov bh,1
+L1:
+    cmp [si],bl
+    je L2
+    inc si
+    inc bh
+    loop L1
+    lea dx,NotFound
+    mov ah,09h
+    int 21h
+    jmp L3
+L2:
+    lea dx,FoundMsg
+    mov ah,09h
+    int 21h
+    mov dl,bh
+    add dl,'0'
+    mov ah,02h
+    int 21h
+L3:
+    mov ax,4C00h
+    int 21h
+Code_here ends
+End Start
+
+
+; EXPERIMENT 7 - EXERCISE: REPLACE 'e' WITH 'o' IN A STRING
+Data_here segment
+    Str db 'Welcome to 8086 Microprocessor$'
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    lea si,Str
+L1:
+    mov al,[si]
+    cmp al,'$'
+    je L2
+    cmp al,'e'
+    jne L3
+    mov byte ptr [si],'o'
+L3:
+    inc si
+    jmp L1
+L2:
+    lea dx,Str
+    mov ah,09h
+    int 21h
+    mov ax,4C00h
+    int 21h
+Code_here ends
+End Start
+
+
+; EXPERIMENT 8 - PROGRAM 1: BCD TO BINARY USING REGISTERS
+Code_here segment
+Assume cs:Code_here
+Start:
+    mov al,45h
+    call Convert
+    int 3
+
+Convert proc near
+    mov bl,al
+    and al,0Fh
+    mov dl,al
+    mov al,bl
+    mov cl,4
+    shr al,cl
+    mov bl,10
+    mul bl
+    add al,dl
+    ret
+Convert endp
+
+Code_here ends
+End Start
+
+
+; EXPERIMENT 8 - PROGRAM 2: BCD TO BINARY USING GENERAL MEMORY
+Data_here segment
+    BCD db 45h
+    Result db 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov al,BCD
+    call Convert
+    mov Result,al
+    int 3
+
+Convert proc near
+    mov bl,al
+    and al,0Fh
+    mov dl,al
+    mov al,bl
+    mov cl,4
+    shr al,cl
+    mov bl,10
+    mul bl
+    add al,dl
+    ret
+Convert endp
+
+Code_here ends
+End Start
+
+
+; EXPERIMENT 8 - PROGRAM 3: BCD TO BINARY USING POINTERS
+Data_here segment
+    BCD db 45h
+    Result db 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    lea si,BCD
+    lea di,Result
+    mov al,[si]
+    call Convert
+    mov [di],al
+    int 3
+
+Convert proc near
+    mov bl,al
+    and al,0Fh
+    mov dl,al
+    mov al,bl
+    mov cl,4
+    shr al,cl
+    mov bl,10
+    mul bl
+    add al,dl
+    ret
+Convert endp
+
+Code_here ends
+End Start
+
+
+; EXPERIMENT 8 - PROGRAM 4: BCD TO BINARY USING STACK
+Data_here segment
+    BCD db 45h
+    Result db 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    xor ax,ax
+    mov al,BCD
+    push ax
+    call Convert
+    mov Result,al
+    int 3
+
+Convert proc near
+    push bp
+    mov bp,sp
+    mov ax,[bp+4]
+    mov bl,al
+    and al,0Fh
+    mov dl,al
+    mov al,bl
+    mov cl,4
+    shr al,cl
+    mov bl,10
+    mul bl
+    add al,dl
+    pop bp
+    ret 2
+Convert endp
+
+Code_here ends
+End Start
+
+
+; EXPERIMENT 8 - EXERCISE: FIND MINIMUM USING REGISTER PARAMETERS
+Data_here segment
+    Arr db 5,2,4,1,3
+    Minimum db 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    lea si,Arr
+    mov al,[si]
+    inc si
+    mov cx,4
+L1:
+    mov bl,[si]
+    call FindMin
+    inc si
+    loop L1
+    mov Minimum,al
+    int 3
+
+FindMin proc near
+    cmp al,bl
+    jbe L2
+    mov al,bl
+L2:
+    ret
+FindMin endp
+
+Code_here ends
+End Start
+
+
+; EXPERIMENT 9 - PROGRAM 1: FACTORIAL USING RECURSION
+Data_here segment
+    N dw 5
+    Result dw 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov ax,N
+    call Factorial
+    mov Result,ax
+    int 3
+
+Factorial proc near
+    cmp ax,1
+    jle L1
+    push ax
+    dec ax
+    call Factorial
+    pop bx
+    mul bx
+    ret
+L1:
+    mov ax,1
+    ret
+Factorial endp
+
+Code_here ends
+End Start
+
+
+; EXPERIMENT 10 - FILE 1: MAIN MODULE FOR 32-BIT DIVISION
+Data_here segment public 'DATA'
+    public Numerator,Divisor,Quotient,Remainder
+    Numerator dd 12345678h
+    Divisor dw 1234h
+    Quotient dd 0
+    Remainder dw 0
+Data_here ends
+
+Code_here segment public 'CODE'
+Assume cs:Code_here,ds:Data_here
+Extrn Divide:far
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    call far ptr Divide
+    int 3
+Code_here ends
+End Start
+
+
+; EXPERIMENT 10 - FILE 2: DIVISION PROCEDURE MODULE
+Code_here segment public 'CODE'
+Assume cs:Code_here,ds:Data_here
+Extrn Numerator:dword
+Extrn Divisor:word
+Extrn Quotient:dword
+Extrn Remainder:word
+Public Divide
+
+Divide proc far
+    mov ax,Numerator+2
+    xor dx,dx
+    div Divisor
+    mov Quotient+2,ax
+    mov ax,Numerator
+    div Divisor
+    mov Quotient,ax
+    mov Remainder,dx
+    ret
+Divide endp
+
+Code_here ends
+End
+
+
+; EXPERIMENT 11 - PROGRAM 1: DIVISION OVERFLOW WITH USER-DEFINED TYPE 0 ISR
+Data_here segment
+    ErrorFlag db 0
+Data_here ends
+
+Code_here segment
+Assume cs:Code_here,ds:Data_here
+Start:
+    mov ax,Data_here
+    mov ds,ax
+    mov ErrorFlag,0
+    push ds
+    push cs
+    pop ds
+    mov dx,offset DivideISR
+    mov ax,2500h
+    int 21h
+    pop ds
+    mov dx,0FFFFh
+    mov ax,0FFFFh
+    mov bx,1
+    div bx
+    mov ax,4C00h
+    int 21h
+
+DivideISR proc far
+    push ax
+    push ds
+    mov ax,Data_here
+    mov ds,ax
+    mov ErrorFlag,1
+    pop ds
+    pop ax
+    iret
+DivideISR endp
+
+Code_here ends
+End Start
